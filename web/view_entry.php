@@ -736,7 +736,6 @@ if (isset($action) && ($action == "document"))
               JOIN mrbs_entry e ON r.id=e.room_id
           WHERE e.id=?";
   $res = db()->query($sql, array($id))->next_row_keyed();
-  print_r($res['area_name'], $res['room_name']);
   create_docx($res);
 }
 
