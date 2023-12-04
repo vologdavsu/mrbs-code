@@ -12,6 +12,7 @@ use MRBS\Form\Form;
 require "defaultincludes.inc";
 require_once "mrbs_sql.inc";
 require_once "functions_view.inc";
+require_once "function_word.inc";
 
 
 function generate_registrant_table($row, $previous_page=null)
@@ -725,6 +726,20 @@ if (isset($action) && ($action == "export"))
   }
 }
 
+// CREATE DOCUMENT
+//
+if (isset($action) && ($action == "document"))
+{
+  $sql = "SELECT a.area_name, r.room_name, e.name, e.start_time, e.end_time, e.description
+          FROM mrbs_area a
+              JOIN mrbs_room r ON r.area_id=a.id
+              JOIN mrbs_entry e ON r.id=e.room_id
+          WHERE e.id=?";
+  $res = db()->query($sql, array($id))->next_row_keyed();
+  print_r($res['area_name'], $res['room_name']);
+  create_docx($res);
+}
+
 // PHASE 1 - VIEW THE ENTRY
 // ------------------------
 
@@ -1036,6 +1051,29 @@ if (!$keep_private && !$enable_periods)
   }
   echo "</div>\n";
 }
+
+
+// Export in Document
+if (!$keep_private && !$enable_periods)
+{
+  echo "<div>\n";
+  if (!$series)
+  {
+    echo "<div>\n";
+    $params = array(
+      'action' => multisite('view_entry.php'),
+      'value'  => "Документ",
+      'inputs' => array('id' => $id,
+        'action' => 'document',
+        'returl' => $returl)
+    );
+    generate_button($params);
+    echo "</div>\n";
+  }
+  echo "</div>\n";
+}
+
+
 echo "</div>\n";
 
 // Don't display a link to the previous page if there isn't one (eg if we've got here
