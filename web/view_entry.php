@@ -14,8 +14,7 @@ require_once "mrbs_sql.inc";
 require_once "functions_view.inc";
 require_once "function_word.inc";
 
-
-function generate_registrant_table($row, $previous_page=null)
+function generate_registrant_table($row, $previous_page=null): void
 {
   echo "<div id=\"registrant_list\" class=\"datatable_container\">\n";
   echo "<table id=\"registrants\" class=\"admin_table display\">\n";
