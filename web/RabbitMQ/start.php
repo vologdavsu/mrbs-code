@@ -25,8 +25,8 @@ function check_messages(): void
     $rmq->send_message($data);
     $data = emulate_un_move_message_from_tt();
     $rmq->send_message($data);
-//    $data = emulate_delete_message_from_tt();
-//    $rmq->send_message($data);
+    $data = emulate_delete_message_from_tt();
+    $rmq->send_message($data);
 
     $rmq->receive_message();
 }

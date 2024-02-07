@@ -13,6 +13,6 @@ class Config
   public const exchange_type = "fanout";
   public const queue = "test_queue";
 
-//  public const email_for_reporting = "elgaevav+booking@vogu35.ru";
-  public const email_for_reporting = "ProVad2017@yandex.ru";
+//  eMail не работает, пока что не вводи
+  public const email_for_reporting = "*";
 }

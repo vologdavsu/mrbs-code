@@ -1,0 +1,6 @@
+{
+    "require": {
+        "enqueue/fs": "^0.10.19",
+        "php-amqplib/php-amqplib": "^3.6"
+    }
+}

@@ -99,7 +99,6 @@ class ReceiveCallback
                 $res = mrbsCreateSingleEntry($valid_msg);
             } catch (\Throwable $th) {
                 $count_errors_creating++;
-                continue;
             }
         }
         $error_msg = ($count_errors_collision > 0) ? ". Обнаружена коллизия (Сообщение отправлено на почту elgaevav+booking@vogu35.ru) " : " ";
