@@ -372,6 +372,20 @@ function day_cell_html(string $text, string $link, string $iso_date) : string
   return $html;
 }
 
+function day_cell_html_widget_counter() : string
+{
+    $html = "<a style='display: inline-block;
+                       width: 16px;
+                       height: 16px;
+                       padding: 5px;
+                       border-radius: 4px;
+                       border: 1px solid #000000;
+                       background: #f9f9f9;
+                       cursor: pointer'
+             >10</a>";
+    return $html;
+}
+
 
 // Output a start table cell tag <td> with class of $classes.
 // $classes can be either a string or an array of classes
@@ -799,7 +813,7 @@ function week_table_innerhtml(string $view, int $view_all, int $year, int $month
 {
   if ($view_all)
   {
-    return multiday_view_all_rooms_innerhtml($view, $view_all, $year, $month, $day, $area_id, $room_id);
+    return multiday_view_all_rooms_innerhtml($view, $view_all, $year, $month, $day, $area_id, $room_id, is_widget_counter: true);
   }
   else
   {
@@ -842,7 +856,8 @@ function multiday_header_rows(
   int $room_id,
   int $n_days,
   int $start_dow,
-  string $label=''
+  string $label='',
+  bool $is_widget_counter=false
 ) : array
 {
   global $row_labels_both_sides;
@@ -887,8 +902,13 @@ function multiday_header_rows(
         // the week view when not viewing all the rooms, but just add it always.
         ' data-date="' . htmlspecialchars($date->getISODate()) . '"' .
         ((!empty($classes)) ? ' class="' . implode(' ', $classes) . '"' : '') .
-        '><a href="' . htmlspecialchars($link) . '">' . htmlspecialchars($text) . "</a></th>\n";
+        '><a href="' . htmlspecialchars($link) . '">' . htmlspecialchars($text) . "</a>";
+        if ($is_widget_counter) {
+            $result[$i] .= day_cell_html_widget_counter();
+        }
+        $result[$i] .= "</th>\n";
     }
+
 
     // next line to display rooms on right side
     if ($row_labels_both_sides)
@@ -903,7 +923,7 @@ function multiday_header_rows(
 }
 
 
-function multiday_view_all_rooms_innerhtml(string $view, int $view_all, int $year, int $month, int $day, int $area_id, int $room_id) : string
+function multiday_view_all_rooms_innerhtml(string $view, int $view_all, int $year, int $month, int $day, int $area_id, int $room_id, bool $is_widget_counter=false) : string
 {
   global $row_labels_both_sides, $column_labels_both_ends;
   global $weekstarts;
@@ -1000,7 +1020,7 @@ function multiday_view_all_rooms_innerhtml(string $view, int $view_all, int $yea
 
   if ($days_along_top)
   {
-    $header_inner_rows = multiday_header_rows($view, $view_all, $year, $month, $day_start_interval, $area_id, $room_id, $n_days, $start_dow);
+    $header_inner_rows = multiday_header_rows($view, $view_all, $year, $month, $day_start_interval, $area_id, $room_id, $n_days, $start_dow, is_widget_counter: $is_widget_counter);
   }
   else
   {

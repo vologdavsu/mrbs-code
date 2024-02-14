@@ -1,6 +1,11 @@
 {
+    "name": "mplx/sample",
+    "license": "proprietary",
+    "description": "sample for installing php-toolkit-cronjob with composer",
+
     "require": {
         "enqueue/fs": "^0.10.19",
-        "php-amqplib/php-amqplib": "^3.6"
+        "php-amqplib/php-amqplib": "^3.6",
+        "mplx/php-toolkit-cronjob": "dev-master"
     }
 }

@@ -16,3 +16,6 @@ class Config
 //  eMail не работает, пока что не вводи
   public const email_for_reporting = "*";
 }
+
+$default_language_tokens = "ru";
+$timezone = "Europe/Moscow";

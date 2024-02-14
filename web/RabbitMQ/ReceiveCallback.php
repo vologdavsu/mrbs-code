@@ -1,20 +1,21 @@
 <?php
 
 namespace MRBS;
+
 global $override_locale, $cli_language, $default_language_tokens, $disable_automatic_language_changing;
 
 use DateTimeZone;
 use IntlDateFormatter;
 use MRBS\Locale;
 
-require_once "../mrbs_sql.inc";
-require_once "../dbsys.inc";
-require_once "../defaultincludes.inc";
-require_once "../lib/MRBS/Locale.php";
-require_once "../lib/MRBS/System.php";
-require_once "../language.inc";
-require_once "../systemdefaults.inc.php";
-require_once "../config.inc.php";
+require_once(substr(__DIR__, 0, -8) . "mrbs_sql.inc");
+require_once(substr(__DIR__, 0, -8) . "dbsys.inc");
+require_once(substr(__DIR__, 0, -8) . "defaultincludes.inc");
+require_once(substr(__DIR__, 0, -8) . "lib/MRBS/Locale.php");
+require_once(substr(__DIR__, 0, -8) . "lib/MRBS/System.php");
+require_once(substr(__DIR__, 0, -8) . "language.inc");
+require_once(substr(__DIR__, 0, -8) . "systemdefaults.inc.php");
+require_once(substr(__DIR__, 0, -8) . "config.inc.php");
 
 class ReceiveCallback
 {
@@ -31,6 +32,7 @@ class ReceiveCallback
         }
 
         echo "\n[Получено сообщение] ";
+        log_in_file("\n[Получено сообщение] ");
 
         if (explode(":", $message["action"])[1] == "create_booking") {
             $this->create_booking($message['message']);
@@ -68,15 +70,18 @@ class ReceiveCallback
         }
 
         echo "Неизвестное имя действия: " . $message["action"];
+        log_in_file("Неизвестное имя действия: " . $message["action"]);
     }
 
     private function create_booking($message, $is_move=false): void
     {
         echo "create_booking => ";
+        log_in_file("create_booking => ");
         $valid_msgs = $this->prepare_message($message);
         $res = $this->check_cabinet_existing($valid_msgs[0]["building"], $valid_msgs[0]["audience"]);
         if ($res == null) {
             echo "[WARNING] Такого кабинета не существует. " . 'УК' . $valid_msgs[0]["building"] . ', аудитория ' . $valid_msgs[0]["audience"] . ".";
+            log_in_file("[WARNING] Такого кабинета не существует. " . 'УК' . $valid_msgs[0]["building"] . ', аудитория ' . $valid_msgs[0]["audience"] . ".");
             return;
         }
         $room_id = $res;
@@ -103,6 +108,7 @@ class ReceiveCallback
         }
         $error_msg = ($count_errors_collision > 0) ? ". Обнаружена коллизия (Сообщение отправлено на почту elgaevav+booking@vogu35.ru) " : " ";
         echo count($valid_msgs) - $count_errors_collision - $count_errors_creating . " из " . count($valid_msgs) . " Записей бронирования создано" . $error_msg;
+        log_in_file(count($valid_msgs) - $count_errors_collision - $count_errors_creating . " из " . count($valid_msgs) . " Записей бронирования создано" . $error_msg);
     }
     private function check_cabinet_existing($building, $audience): ?int
     {
@@ -192,6 +198,7 @@ class ReceiveCallback
     private function update_booking($message): void
     {
         echo "update_booking: ";
+        log_in_file("update_booking: ");
 
 //        $valid_msgs = $this->prepare_message($message);
 //        $res = $this->check_cabinet_existing($valid_msgs[0]["building"], $valid_msgs[0]["audience"]);
@@ -234,18 +241,21 @@ class ReceiveCallback
 //        echo $update_count . " Записей бронирования обновлено";
         $this->delete_booking($message);
         echo "+ ";
+        log_in_file("+ ");
         $this->create_booking($message);
     }
 
     private function delete_booking($message): void
     {
         echo "delete_booking => ";
+        log_in_file("delete_booking => ");
         $sql = "select count(id) from mrbs_entry
                 where id_tt=?";
         $amount = db()->query($sql, array($message["id"]))->next_row_keyed();
 
         if ($amount["count(id)"] == 0) {
             echo "Возникли ошибки при удалении записи бронирования ";
+            log_in_file("Возникли ошибки при удалении записи бронирования ");
             return;
         }
 
@@ -253,29 +263,35 @@ class ReceiveCallback
             where id_tt=?";
         db()->query($sql, array($message["id"]))->next_row_keyed();
         echo "Записи бронирования удалены ";
+        log_in_file("Записи бронирования удалены ");
     }
 
     private function move_booking($message): void
     {
         echo "move_booking: ";
+        log_in_file("move_booking: ");
         $valid_msgs = $this->prepare_date($message["date"], $message["time_skip"]);
         $this->delete_one_booking_by_date($valid_msgs);
         echo "+ ";
+        log_in_file("+ ");
         $this->create_booking($message, true);
     }
 
     private function un_move_booking($message): void
     {
         echo "un_move_booking: ";
+        log_in_file("un_move_booking: ");
         $valid_msgs = $this->prepare_date($message["date"], $message["time_skip"]);
         $this->delete_one_booking_by_date($valid_msgs);
         echo "+ ";
+        log_in_file("+ ");
         $this->create_booking($message);
     }
 
     private function skip_booking($message): void
     {
         echo "skip_booking => ";
+        log_in_file("skip_booking => ");
         $valid_msgs = $this->prepare_date($message["date"], $message["time_skip"]);
         $this->delete_one_booking_by_date($valid_msgs);
     }
@@ -283,12 +299,14 @@ class ReceiveCallback
     private function delete_one_booking_by_date($message): void
     {
         echo "delete_one_booking_by_date => ";
+        log_in_file("delete_one_booking_by_date => ");
         $sql = "select count(id) from mrbs_entry
                 where start_time=? and end_time=?";
         $amount = db()->query($sql, array($message["start"], $message["end"]))->next_row_keyed();
 
         if ($amount["count(id)"] == 0) {
             echo "Возникли ошибки при удалении записи бронирования ";
+            log_in_file("Возникли ошибки при удалении записи бронирования ");
             return;
         }
 
@@ -297,11 +315,13 @@ class ReceiveCallback
 
         db()->query($sql, array($message["start"], $message["end"]));
         echo "Запись бронирования удалена ";
+        log_in_file("Запись бронирования удалена ");
     }
 
     private function un_skip_booking($message): void
     {
         echo "un_skip_booking: ";
+        log_in_file("un_skip_booking: ");
         $this->create_booking($message);
     }
 

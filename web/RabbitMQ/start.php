@@ -9,24 +9,45 @@ ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
 
+if(empty($_SERVER['DOCUMENT_ROOT']))$_SERVER['DOCUMENT_ROOT']=dirname(dirname(__FILE__));
+if(empty($_SERVER['HTTP_HOST']))$_SERVER['HTTP_HOST']='htmlweb.ru';
+if(!isset($_SERVER['REMOTE_ADDR'])||!$_SERVER['REMOTE_ADDR'])$_SERVER['REMOTE_ADDR']='127.0.0.1';
+if(!isset($_SERVER['REQUEST_URI'])||!$_SERVER['REQUEST_URI'])$_SERVER['REQUEST_URI']='/cron.php';
+
+function log_in_file($msg): void {
+    $file = '/home/vadim/Desktop/php_projects/mrbs-code/web/RabbitMQ/logfile1.txt';
+
+    if(file_exists($file)) {
+        $current = file_get_contents($file);
+    } else {
+        $current = '';
+    }
+
+    $current .= $msg;
+    file_put_contents($file, $current);
+}
+
 function check_messages(): void
 {
+//    $rmq = new RMQBroker();
+//
+//    $data = emulate_create_message_from_tt();
+//    $rmq->send_message($data);
+//    $data = emulate_update_message_from_tt();
+//    $rmq->send_message($data);
+//    $data = emulate_move_message_from_tt();
+//    $rmq->send_message($data);
+//    $data = emulate_skip_message_from_tt();
+//    $rmq->send_message($data);
+//    $data = emulate_un_skip_message_from_tt();
+//    $rmq->send_message($data);
+//    $data = emulate_un_move_message_from_tt();
+//    $rmq->send_message($data);
+//    $data = emulate_delete_message_from_tt();
+//    $rmq->send_message($data);
+//
+//    unset($rmq);
     $rmq = new RMQBroker();
-
-    $data = emulate_create_message_from_tt();
-    $rmq->send_message($data);
-    $data = emulate_update_message_from_tt();
-    $rmq->send_message($data);
-    $data = emulate_move_message_from_tt();
-    $rmq->send_message($data);
-    $data = emulate_skip_message_from_tt();
-    $rmq->send_message($data);
-    $data = emulate_un_skip_message_from_tt();
-    $rmq->send_message($data);
-    $data = emulate_un_move_message_from_tt();
-    $rmq->send_message($data);
-    $data = emulate_delete_message_from_tt();
-    $rmq->send_message($data);
 
     $rmq->receive_message();
 }
