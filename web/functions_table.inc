@@ -1020,7 +1020,7 @@ function multiday_view_all_rooms_innerhtml(string $view, int $view_all, int $yea
 
   if ($days_along_top)
   {
-    $header_inner_rows = multiday_header_rows($view, $view_all, $year, $month, $day_start_interval, $area_id, $room_id, $n_days, $start_dow, is_widget_counter: $is_widget_counter);
+    $header_inner_rows = multiday_header_rows($view, $view_all, $year, $month, $day_start_interval, $area_id, $room_id, $n_days, $start_dow, is_widget_counter: false);
   }
   else
   {

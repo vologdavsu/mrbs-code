@@ -33,10 +33,11 @@ sudo rabbitmqctl add_user tt 123
 sudo rabbitmqctl set_user_tags admin administrator
 sudo rabbitmqctl set_permissions -p / admin ".*"
 ```
+Вместо "/" и ".*" введите свои значения
 ## Запустить composer
 ```bush
 php composer.phar update
 php composer.phar install
 ```
 ## Запустить как отдельный скрипт
-Скрипт будет работать в фоне и автоматически выполнять полученные сообщения
+Задать cron задачу на выполнение файла start.php, рекомендую выполнять каждую минуту

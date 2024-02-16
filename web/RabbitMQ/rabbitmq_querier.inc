@@ -32,7 +32,7 @@ class RMQBroker
             $this->channel = $this->connection->channel();
 
             $this->channel->exchange_declare(self::exchange, self::exchange_type, false, false, false);
-//            $this->channel->queue_declare(self::queue, true, false, false, false);
+            $this->channel->queue_declare(self::queue, false, false, false, false);
         }
     }
 
@@ -44,7 +44,7 @@ class RMQBroker
 
     function receive_message(): void
     {
-        list($queue_name, $this->messageCount, $consumerCount) = $this->channel->queue_declare(self::queue, true, false, false, false);
+        list($queue_name, $this->messageCount, $consumerCount) = $this->channel->queue_declare(self::queue, false, false, false, false);
         $this->channel->queue_bind($queue_name, self::exchange);
 
         $callback = array($this->receive_callback, 'callback');

@@ -1738,7 +1738,7 @@ $default_language_tokens = "en";
 // MRBS performs.  The locale should be in the form of a BCP 47 language
 // tag, eg 'en-GB', or 'sr-Latn-RS'.   Note that MRBS will convert this into
 // a format suitable for your OS, eg by adding '.utf-8' or changing it to 'eng'.
-$override_locale = "";
+$override_locale = "ru-RU";
 
 // FAQ file language selection. If not set, use the default English file.
 // If your language faq file is available, set $faqfilelang to match the

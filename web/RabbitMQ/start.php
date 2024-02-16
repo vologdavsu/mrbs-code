@@ -5,17 +5,8 @@ namespace MRBS;
 require_once __DIR__ . '/vendor/autoload.php';
 require_once "rabbitmq_querier.inc";
 
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
-if(empty($_SERVER['DOCUMENT_ROOT']))$_SERVER['DOCUMENT_ROOT']=dirname(dirname(__FILE__));
-if(empty($_SERVER['HTTP_HOST']))$_SERVER['HTTP_HOST']='htmlweb.ru';
-if(!isset($_SERVER['REMOTE_ADDR'])||!$_SERVER['REMOTE_ADDR'])$_SERVER['REMOTE_ADDR']='127.0.0.1';
-if(!isset($_SERVER['REQUEST_URI'])||!$_SERVER['REQUEST_URI'])$_SERVER['REQUEST_URI']='/cron.php';
-
 function log_in_file($msg): void {
-    $file = '/home/vadim/Desktop/php_projects/mrbs-code/web/RabbitMQ/logfile1.txt';
+    $file = __DIR__ . 'logfile1.txt';
 
     if(file_exists($file)) {
         $current = file_get_contents($file);

@@ -13,9 +13,6 @@ require_once(substr(__DIR__, 0, -8) . "dbsys.inc");
 require_once(substr(__DIR__, 0, -8) . "defaultincludes.inc");
 require_once(substr(__DIR__, 0, -8) . "lib/MRBS/Locale.php");
 require_once(substr(__DIR__, 0, -8) . "lib/MRBS/System.php");
-require_once(substr(__DIR__, 0, -8) . "language.inc");
-require_once(substr(__DIR__, 0, -8) . "systemdefaults.inc.php");
-require_once(substr(__DIR__, 0, -8) . "config.inc.php");
 
 class ReceiveCallback
 {
@@ -103,6 +100,7 @@ class ReceiveCallback
             try {
                 $res = mrbsCreateSingleEntry($valid_msg);
             } catch (\Throwable $th) {
+                echo $th;
                 $count_errors_creating++;
             }
         }
