@@ -25,7 +25,7 @@ require_once 'lib/autoload.inc';
 /**********
  * Timezone
  **********/
-
+$override_locale = "ru"
 // The timezone your meeting rooms run in. It is especially important
 // to set this if you're using PHP 5 on Linux. In this configuration
 // if you don't, meetings in a different DST than you are currently
