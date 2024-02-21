@@ -27,6 +27,14 @@ systemctl status rabbitmq-server
 rabbitmq-plugins list
 rabbitmq-plugins enable rabbitmq_management
 ```
+## Выполнить модификацию таблиц в ручную
+Для этого нужно последовательно ввести команды в консоль
+```bush
+mysql --user=root -p
+use mrbs
+alter table mrbs_entry add id_tt int null;
+alter table mrbs_entry add is_move boolean default false not null;
+```
 ## Создать пользователя и дать ему права на просмотр и запись сообщений
 ```bush
 sudo rabbitmqctl add_user tt 123
